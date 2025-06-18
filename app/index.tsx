@@ -4,11 +4,27 @@ import { Text, View, Button } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { observable } from "@legendapp/state";
 import { use$ } from "@legendapp/state/react";
+import { synced } from "@legendapp/state/sync";
+import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv"
 
 
+const state$ = observable(synced({
+	initial: {
+		items: [
+			{ id: "1", title: "Test" },
+			{ id: "2", title: "Hello Expo / React Native" },
+			{ id: "3", title: "Go Train" },
+		]
+	},
+	persist: {
+		name: "firstPersist",
+		plugin: ObservablePersistMMKV
+	}
+
+}));
 
 
-const state$ = observable({
+const statetwo$ = observable({
 	items: [
 		{ id: "1", title: "Test" },
 		{ id: "2", title: "Hello Expo / React Native" },
@@ -16,11 +32,17 @@ const state$ = observable({
 	]
 });
 
+
 export default function Index() {
 
-	const addAnother = () => state$.items.set((prev) => [...prev, { id: String(prev.length + 1), title: "Another" }])
+	const addAnother = () => {
+		state$.items.set((prev) => [...prev, { id: String(prev.length + 1), title: "Another" }])
+		statetwo$.items.set((prev) => [...prev, { id: String(prev.length + 1), title: "Another" }])
+
+	}
 
 	const items = use$(state$.items)
+	const itemstwo = use$(statetwo$.items)
 
 	return (
 
@@ -36,6 +58,16 @@ export default function Index() {
 				<LegendList
 					className="flex-1 justify-center align-center"
 					data={items}
+					renderItem={({ item }) => <Text className="text-center">{item.title}</Text>}
+					keyExtractor={(item) => item.id}
+					recycleItems={true}
+				/>
+			</View>
+			<View className="flex-1">
+
+				<LegendList
+					className="flex-1 justify-center align-center"
+					data={itemstwo}
 					renderItem={({ item }) => <Text className="text-center">{item.title}</Text>}
 					keyExtractor={(item) => item.id}
 					recycleItems={true}
