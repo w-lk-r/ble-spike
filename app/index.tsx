@@ -6,6 +6,8 @@ import { observable } from "@legendapp/state";
 import { use$ } from "@legendapp/state/react";
 import { synced } from "@legendapp/state/sync";
 import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv"
+import { CartesianChart, Line } from "victory-native";
+
 
 
 const state$ = observable(synced({
@@ -43,6 +45,10 @@ export default function Index() {
 
 	const items = use$(state$.items)
 	const itemstwo = use$(statetwo$.items)
+	const DATA = Array.from({ length: 31 }, (_, i) => ({
+		day: i,
+		highTmp: 40 + 30 * Math.random(),
+	}));
 
 	return (
 
@@ -52,6 +58,15 @@ export default function Index() {
 					title="Add Another"
 					onPress={addAnother}
 				/>
+			</View>
+			<View className="flex-1 justify-center align-center">
+				<CartesianChart data={DATA} xKey="day" yKeys={["highTmp"]}>
+					{/* 👇 render function exposes various data, such as points. */}
+					{({ points }) => (
+						// 👇 and we'll use the Line component to render a line path.
+						<Line points={points.highTmp} color="red" strokeWidth={3} />
+					)}
+				</CartesianChart>
 			</View>
 			<View className="flex-1">
 
