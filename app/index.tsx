@@ -1,14 +1,21 @@
 import "@/global.css"
 
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, Platform } from "react-native";
 import { LegendList } from "@legendapp/list";
 import { observable } from "@legendapp/state";
 import { use$ } from "@legendapp/state/react";
 import { synced } from "@legendapp/state/sync";
 import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv"
+import { matchFont } from "@shopify/react-native-skia";
 import { CartesianChart, Line } from "victory-native";
 
 
+
+const fontFamily = Platform.select({ ios: "Helvetica", default: "serif" });
+const fontStyle = {
+	fontFamily,
+};
+const font = matchFont(fontStyle);
 
 const state$ = observable(synced({
 	initial: {
@@ -59,11 +66,14 @@ export default function Index() {
 					onPress={addAnother}
 				/>
 			</View>
-			<View className="flex-1 justify-center align-center">
-				<CartesianChart data={DATA} xKey="day" yKeys={["highTmp"]}>
-					{/* 👇 render function exposes various data, such as points. */}
+			<View className="p-12 flex-1 justify-center align-center">
+				<CartesianChart
+					data={DATA}
+					xKey="day"
+					yKeys={["highTmp"]}
+					axisOptions={{ font }}
+				>
 					{({ points }) => (
-						// 👇 and we'll use the Line component to render a line path.
 						<Line points={points.highTmp} color="red" strokeWidth={3} />
 					)}
 				</CartesianChart>
