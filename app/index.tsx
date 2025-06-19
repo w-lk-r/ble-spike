@@ -19,11 +19,7 @@ const font = matchFont(fontStyle);
 
 const state$ = observable(synced({
 	initial: {
-		items: [
-			{ id: "1", title: "Test" },
-			{ id: "2", title: "Hello Expo / React Native" },
-			{ id: "3", title: "Go Train" },
-		]
+		data: [{ day: 0, highTmp: 0 }]
 	},
 	persist: {
 		name: "firstPersist",
@@ -33,29 +29,14 @@ const state$ = observable(synced({
 }));
 
 
-const statetwo$ = observable({
-	items: [
-		{ id: "1", title: "Test" },
-		{ id: "2", title: "Hello Expo / React Native" },
-		{ id: "3", title: "Go Train" },
-	]
-});
-
-
 export default function Index() {
 
 	const addAnother = () => {
-		state$.items.set((prev) => [...prev, { id: String(prev.length + 1), title: "Another" }])
-		statetwo$.items.set((prev) => [...prev, { id: String(prev.length + 1), title: "Another" }])
+		state$.data.set((prev) => [...prev, { day: prev.length + 1, highTmp: 25 + 10 * Math.random() }])
 
 	}
 
-	const items = use$(state$.items)
-	const itemstwo = use$(statetwo$.items)
-	const DATA = Array.from({ length: 31 }, (_, i) => ({
-		day: i,
-		highTmp: 40 + 30 * Math.random(),
-	}));
+	const data = use$(state$.data)
 
 	return (
 
@@ -68,7 +49,7 @@ export default function Index() {
 			</View>
 			<View className="p-12 flex-1 justify-center align-center">
 				<CartesianChart
-					data={DATA}
+					data={data}
 					xKey="day"
 					yKeys={["highTmp"]}
 					axisOptions={{ font }}
@@ -82,19 +63,9 @@ export default function Index() {
 
 				<LegendList
 					className="flex-1 justify-center align-center"
-					data={items}
-					renderItem={({ item }) => <Text className="text-center">{item.title}</Text>}
-					keyExtractor={(item) => item.id}
-					recycleItems={true}
-				/>
-			</View>
-			<View className="flex-1">
-
-				<LegendList
-					className="flex-1 justify-center align-center"
-					data={itemstwo}
-					renderItem={({ item }) => <Text className="text-center">{item.title}</Text>}
-					keyExtractor={(item) => item.id}
+					data={data}
+					renderItem={({ item }) => <Text className="text-center">{item.day}</Text>}
+					keyExtractor={(item) => String(item.day)}
 					recycleItems={true}
 				/>
 			</View>
