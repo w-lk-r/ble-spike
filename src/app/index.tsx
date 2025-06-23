@@ -1,9 +1,9 @@
 import "@/global.css"
-import ChartScreen from "@/src/screens/chartScreen";
+import PlaceholderScreen from "@/src/screens/placeholderScreen";
 
 
 export default function Index() {
 	return (
-		<ChartScreen />
+		<PlaceholderScreen />
 	)
 }
