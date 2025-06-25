@@ -10,14 +10,12 @@ export default function RootLayout() {
 					title: "Home",
 				}}
 			/>
-			<Tabs.Protected guard={Platform.OS != "web"}>
-				<Tabs.Screen
-					name="activity"
-					options={{
-						title: "Activity",
-					}}
-				/>
-			</Tabs.Protected >
+			<Tabs.Screen
+				name="activity"
+				options={{
+					title: "Activity",
+				}}
+			/>
 			<Tabs.Screen
 				name="devices"
 				options={{

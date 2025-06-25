@@ -11,7 +11,8 @@ const fontFamily = Platform.select({ ios: "Helvetica", default: "serif" });
 const fontStyle = {
 	fontFamily,
 };
-const font = matchFont(fontStyle);
+// todo add a font for web
+const font = Platform.OS != "web" ? matchFont(fontStyle) : null;
 
 const state$ = observable(synced({
 	initial: {
