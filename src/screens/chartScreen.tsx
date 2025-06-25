@@ -7,11 +7,6 @@ import { ObservablePersistMMKV } from "@legendapp/state/persist-plugins/mmkv"
 import { matchFont } from "@shopify/react-native-skia";
 import { CartesianChart, Line } from "victory-native";
 
-const fontFamily = Platform.select({ ios: "Helvetica", default: "serif" });
-const fontStyle = {
-	fontFamily,
-};
-const font = matchFont(fontStyle);
 
 const state$ = observable(synced({
 	initial: {
@@ -48,7 +43,6 @@ export default function ChartScreen() {
 					data={data}
 					xKey="day"
 					yKeys={["highTmp"]}
-					axisOptions={{ font }}
 				>
 					{({ points }) => (
 						<Line points={points.highTmp} color="red" strokeWidth={3} />
