@@ -1,13 +1,13 @@
 // scanStateMachine.js
 import { Observable } from '@legendapp/state';
-import { BleManagerType, ScanStates, ScanEvents } from '@/src/ble/types';
+import { BleManagerType, ScanStates, ScanEvents, Device, ScanState } from '@/src/ble/types';
 
 export const initializeScanStateMachine =
 	(
 		bleManager: BleManagerType,
-		isBlePoweredOn$: Observable,
-		foundDevices$: Observable,
-		scanningState$: Observable
+		isBlePoweredOn$: Observable<boolean>,
+		foundDevices$: Observable<Device[]>,
+		scanningState$: Observable<ScanState>
 	) => {
 		const transition = (event: ScanEvents) => {
 			const current = scanningState$.currentState.get();
