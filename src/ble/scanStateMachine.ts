@@ -1,6 +1,6 @@
 // scanStateMachine.js
 import { Observable } from '@legendapp/state';
-import { BleManagerType, ScanStates, ScanEvents, Device, ScanState } from '@/src/ble/types';
+import { BleManagerType, ScanStates, ScanEvents, Device, ScanState, ConnectionStates } from '@/src/ble/types';
 
 export const initializeScanStateMachine =
 	(
@@ -68,9 +68,22 @@ export const initializeScanStateMachine =
 					foundDevices$.set(currentDevices => {
 						const existingIndex = currentDevices.findIndex(d => d.id === device.id);
 						if (existingIndex === -1) {
-							return [...currentDevices, { id: device.id, name: device.id }];
+							return [...currentDevices, { 
+								id: device.id, 
+								name: device.name || device.id,
+								rssi: device.rssi || undefined,
+								connectionState: ConnectionStates.Disconnected,
+								bleDevice: device
+							}];
 						}
-						return currentDevices; // Device already exists, do not add
+						// Update existing device with latest scan data
+						const updatedDevices = [...currentDevices];
+						updatedDevices[existingIndex] = {
+							...updatedDevices[existingIndex],
+							rssi: device.rssi || updatedDevices[existingIndex].rssi,
+							bleDevice: device
+						};
+						return updatedDevices;
 					});
 				}
 			});

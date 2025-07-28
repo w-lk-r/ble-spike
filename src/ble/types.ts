@@ -1,4 +1,4 @@
-import type { BleManager } from 'react-native-ble-plx';
+import type { BleManager, Device as BleDevice } from 'react-native-ble-plx';
 
 export enum ScanStates {
 	Scanning = 'scanning',
@@ -10,16 +10,36 @@ export enum ScanEvents {
 	StopScan = 'STOP_SCAN',
 }
 
-export interface Device {
-	id: String,
-	name: String,
+export enum ConnectionStates {
+	Disconnected = 'disconnected',
+	Connecting = 'connecting',
+	Connected = 'connected',
+	Disconnecting = 'disconnecting',
 }
 
+export enum ConnectionEvents {
+	Connect = 'CONNECT',
+	Disconnect = 'DISCONNECT',
+	ConnectionLost = 'CONNECTION_LOST',
+}
+
+export interface Device {
+	id: string,
+	name: string,
+	rssi?: number,
+	connectionState: ConnectionStates,
+	bleDevice?: BleDevice,
+}
 
 export interface ScanState {
 	currentState: ScanStates;
 }
 
+export interface ConnectionState {
+	deviceId: string;
+	currentState: ConnectionStates;
+	error?: string;
+}
 
 export type BleManagerType = BleManager;
 
